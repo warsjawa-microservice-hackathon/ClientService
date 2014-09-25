@@ -7,7 +7,7 @@ env:
   global:
     - JAVA_OPTS=-Xmx512m
     - GROUP_ID="pl.warsjawa"
-    - ARTIFACT="warsjava-marketing-service"
+    - ARTIFACT="client-service"
     - VERSION=CD-${TRAVIS_BUILD_NUMBER}
     - RUNDECK_URL="http://rundeck.warsjawa.uservices.pl:4440"
     - RUNDECK_JOB_ID="da97ec93-39d1-48c4-a421-4f63304c1628"
