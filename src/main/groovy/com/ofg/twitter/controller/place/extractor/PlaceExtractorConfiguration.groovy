@@ -1,8 +1,8 @@
-package com.ofg.twitter.controller.place.extractor
 
+package com.ofg.twitter.controller.place.extractor
 import com.codahale.metrics.Meter
 import com.codahale.metrics.MetricRegistry
-import com.ofg.infrastructure.discovery.ServiceResolver
+import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient
 import com.ofg.infrastructure.web.resttemplate.RestTemplate
 import com.ofg.twitter.controller.place.PlacesJsonBuilder
 import com.ofg.twitter.controller.place.extractor.metrics.ExtractorMetricsConfiguration
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
-import org.springframework.web.client.RestOperations
 import org.springframework.web.client.RestTemplate
 
 @Configuration
@@ -19,8 +18,8 @@ import org.springframework.web.client.RestTemplate
 class PlaceExtractorConfiguration {
 
     @Bean
-    CityFinder cityFinder(RestOperations restTemplate, @Value('${city.finding.service.url:http://api.openweathermap.org/data/2.5/weather}') String cityFindingServiceUrl) {
-        return new CityFinder(restTemplate, cityFindingServiceUrl)
+    CityFinder cityFinder(ServiceRestClient serviceRestClient, @Value('${city.finding.service.url:http://api.openweathermap.org/data/2.5/weather}') String cityFindingServiceUrl) {
+        return new CityFinder(new WeatherClient(serviceRestClient, cityFindingServiceUrl))
     }
     
     @Bean
@@ -39,9 +38,8 @@ class PlaceExtractorConfiguration {
     @Bean
     PropagationWorker propagationWorker(PlacesExtractor placesExtractor,
                                         PlacesJsonBuilder placesJsonBuilder,
-                                        ServiceResolver serviceResolver,
-                                        RestTemplate restTemplate) {
-        return new PlacePropagatingWorker(placesExtractor, placesJsonBuilder, serviceResolver, restTemplate)
+                                        ServiceRestClient serviceRestClient) {
+        return new PlacePropagatingWorker(placesExtractor, placesJsonBuilder, new ColleratorClient(serviceRestClient))
     }
 
 }
