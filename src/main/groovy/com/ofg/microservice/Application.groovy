@@ -17,7 +17,7 @@ import static com.ofg.config.BasicProfiles.*
 @Configuration
 @EnableAutoConfiguration(exclude = MetricFilterAutoConfiguration)
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-@ComponentScan(basePackages = ["com.ofg.microservice", "com.ofg.twitter"])
+@ComponentScan(basePackages = ["com.ofg.microservice", "com.ofg.client"])
 @EnableCaching
 @EnableAsync
 class Application {
